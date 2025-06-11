@@ -1,22 +1,21 @@
-{% load django_htmx %}
-{% load django_bootstrap5 %}
+{% load django_bootstrap5 django_htmx %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-      {% block title %}
-        Firma
-      {% endblock title %}
-    </title>
-    {% bootstrap_css %}
-    {% bootstrap_javascript %}
-    {% htmx_script %}
-  </head>
-  <body hx-boost="true" hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'>
-    {% block content %}
-      Base content
-    {% endblock content %}
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    {% block title %}
+    Firma
+    {% endblock title %}
+  </title>
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+  {% htmx_script %}
+</head>
+<body hx-boost="true" hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'>
+  {% block content %}
+  Base content
+  {% endblock content %}
+</body>
 </html>
