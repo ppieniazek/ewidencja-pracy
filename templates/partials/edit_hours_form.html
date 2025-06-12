@@ -1,0 +1,14 @@
+<form hx-post="{% url 'save_hours' worker_id=worker.id %}"
+      hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'
+      hx-target="closest td"
+      hx-swap="outerHTML"
+      hx-trigger="input changed delay:2s, blur"
+      class="m-0">
+  <input type="hidden" name="date" value="{{ date_str }}">
+  <input type="number"
+         name="hours"
+         value="{{ hours }}"
+         class="form-control form-control-sm text-center p-0 border-primary"
+         style="width: 60px; height: 30px;"
+         autofocus>
+</form>

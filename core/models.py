@@ -37,9 +37,22 @@ class Worker(models.Model):
 
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    brigade = models.ForeignKey(
-        Brigade, on_delete=models.PROTECT, related_name="workers"
-    )
+    brigade = models.ManyToManyField(Brigade, related_name="workers")
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+
+class TimeSheet(models.Model):
+    """Reprezentuje godziny przepracowane przez pracownika w danym dniu."""
+
+    worker = models.ForeignKey(Worker, on_delete=models.CASCADE)
+    date = models.DateField()
+    hours_worked = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        unique_together = ("worker", "date")
+        ordering = ["date", "worker"]
+
+    def __str__(self):
+        return f"{self.worker} - {self.date}: {self.hours_worked} godz."

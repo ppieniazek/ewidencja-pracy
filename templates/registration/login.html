@@ -8,7 +8,7 @@
     <form method="post">
       {% csrf_token %}
       {% bootstrap_form form %}
-      <button type="submit" class="btn btn-primary">Zaloguj</button>
+      {% bootstrap_button "Zaloguj" button_type="submit" %}
     </form>
   </div>
 </div>

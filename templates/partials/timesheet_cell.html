@@ -1,0 +1,4 @@
+<td hx-get="{% url 'get_edit_form' worker_id=worker.id year=current_year month=current_month day=day %}"
+  hx-trigger="click" hx-target="this" hx-swap="innerHTML" class="text-center" style="cursor: pointer;">
+  {{ hours }}
+</td>

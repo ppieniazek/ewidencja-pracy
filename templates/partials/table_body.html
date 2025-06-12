@@ -1,0 +1,25 @@
+{% load dict_filters %}
+
+{% for worker in workers %}
+<tr>
+    <td>{{ worker.first_name }} {{ worker.last_name }}</td>
+    
+    {% for day in days %}
+        {% with worker_hours_dict=hours_map|get_item:worker.id %}
+            {% if worker_hours_dict %}
+                {% with hours=worker_hours_dict|get_item:day|default:"-" %}
+                    {% include "partials/timesheet_cell.html" %}
+                {% endwith %}
+            {% else %}
+                {% with hours="-" %}
+                    {% include "partials/timesheet_cell.html" %}
+                {% endwith %}
+            {% endif %}
+        {% endwith %}
+    {% endfor %}
+</tr>
+{% empty %}
+<tr>
+    <td colspan="{{ days|length|add:1 }}">Brak pracowników w tej brygadzie.</td>
+</tr>
+{% endfor %}

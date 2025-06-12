@@ -1,0 +1,12 @@
+{% include "partials/table_body.html" %}
+
+<!-- This is the Out-of-Band swap. It is now defined explicitly. -->
+<td id="bulk-cell-{{ day }}"
+    hx-swap-oob="outerHTML"
+    class="text-center"
+    style="cursor: pointer;"
+    hx-get="{% url 'get_bulk_edit_form' day=day %}"
+    hx-target="this"
+    hx-swap="outerHTML">
+    -
+</td>

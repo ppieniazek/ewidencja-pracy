@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load dict_filters %}
 
 {% block content %}
 <h1>Panel Główny</h1>
@@ -9,37 +10,28 @@
 <h3 class="mt-4">Ewidencja godzin - {{ current_month_name }} {{ current_year }}</h3>
 
 <div class="table-responsive">
-  <table class="table table-bordered table-striped">
+  <table class="table table-bordered table-hover">
     <thead class="table-dark">
       <tr>
-        <th>Pracownik</th>
+        <th style="min-width: 150px;">Pracownik</th>
         {% for day in days %}
-        <th class="text-center">{{ day }}</th>
+          <th class="text-center">{{ day }}</th>
+        {% endfor %}
+      </tr>
+      {# --- NEW BULK INPUT ROW --- #}
+      <tr>
+        <td><strong>Dla wszystkich</strong></td>
+        {% for day in days %}
+          {% include 'partials/bulk_timesheet_cell.html' %}
         {% endfor %}
       </tr>
     </thead>
-    <tbody>
-      {% for worker in workers %}
-      <tr>
-        <td>{{ worker.first_name }} {{ worker.last_name }}</td>
-
-        {# This inner loop creates a cell for each day #}
-        {% for day in days %}
-        <td class="text-center">
-          {# Placeholder for hours - we will make this dynamic next #}
-          -
-        </td>
-        {% endfor %}
-      </tr>
-      {% empty %}
-      <tr>
-        <td colspan="{{ days|length|add:1 }}">Brak pracowników w tej brygadzie.</td>
-      </tr>
-      {% endfor %}
+    <tbody id="timesheet-body">
+      {# Use the new partial to render the rows #}
+      {% include "partials/table_body.html" %}
     </tbody>
   </table>
 </div>
-
 {% else %}
 <p>Witaj w systemie, {{ user.username }}!</p>
 {% endif %}
