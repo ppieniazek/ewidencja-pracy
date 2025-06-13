@@ -83,6 +83,14 @@ def dashboard(request, year=None, month=None):
     context = {}
     user = request.user
 
+    if user.role == "SZEF":
+        # TODO szef
+        context["brigades"] = [
+            {"id": 1, "name": "Brygada A (Test)"},
+            {"id": 2, "name": "Brygada B (Przykładowa)"},
+        ]
+        pass
+
     if user.role == "BRYGADZISTA" and user.brigade:
         target_date = None
         if year and month:
@@ -92,7 +100,6 @@ def dashboard(request, year=None, month=None):
             q_month = request.GET.get("month")
             if q_year.isdigit() and q_month.isdigit():
                 target_date = date(int(q_year), int(q_month), 1)
-
         if target_date is None:
             target_date = date.today()
 
@@ -198,3 +205,101 @@ def bulk_save_hours(request, year, month):
     context["day"] = day
 
     return render(request, "partials/bulk_update_response.html", context)
+
+    # TODO placeholder views
+
+
+@login_required
+def szef_dashboard_view(request):
+    """
+    Renders the main navigation dashboard for the Szef.
+    """
+    dummy_context = {
+        "brigades": [
+            {"id": 1, "name": "Brygada A (Test)"},
+            {"id": 2, "name": "Brygada B (Przykładowa)"},
+        ]
+    }
+    return render(request, "szef/szef_dashboard.html", dummy_context)
+
+
+@login_required
+def manage_workers_view(request):
+    """Placeholder view for Szef to manage all workers."""
+    dummy_context = {
+        "workers": [
+            {"id": 1, "name": "Jan Kowalski", "rate": 25.00},
+            {"id": 2, "name": "Adam Nowak", "rate": 30.00},
+            {"id": 3, "name": "Piotr Zając (Test)", "rate": 28.50},
+        ]
+    }
+    return render(request, "szef/manage_workers.html", dummy_context)
+
+
+@login_required
+def manage_foremen_view(request):
+    """Placeholder view for Szef to manage foremen and brigades."""
+    dummy_context = {
+        "foremen": [
+            {"id": 1, "name": "Marek Brygadzista", "brigade": "Brygada A (Test)"},
+            {
+                "id": 2,
+                "name": "Krzysztof Kierownik",
+                "brigade": "Brygada B (Przykładowa)",
+            },
+        ]
+    }
+    return render(request, "szef/manage_foremen.html", dummy_context)
+
+
+@login_required
+def assign_workers_view(request, brigade_id):
+    """Placeholder view for Szef to assign workers to a brigade."""
+    dummy_context = {
+        "brigade_name": f"Brygada A (Test) - ID: {brigade_id}",
+        "assigned_workers": [{"name": "Jan Kowalski"}, {"name": "Adam Nowak"}],
+        "unassigned_workers": [{"name": "Piotr Zając (Test)"}],
+    }
+    return render(request, "szef/assign_workers.html", dummy_context)
+
+
+@login_required
+def financial_ledger_view(request):
+    """Placeholder view for Szef to see all financials."""
+    dummy_context = {
+        "unpaid_items": [
+            {
+                "type": "Zaliczka",
+                "date": "2025-06-12",
+                "details": "dla Jan Kowalski",
+                "amount": 200.00,
+            },
+            {
+                "type": "Wydatek",
+                "date": "2025-06-10",
+                "details": "Paliwo do piły (Marek B.)",
+                "amount": 150.00,
+            },
+        ],
+        "paid_items": [
+            {
+                "type": "Wydatek",
+                "date": "2025-06-05",
+                "details": "Rękawice robocze (Marek B.)",
+                "amount": 80.50,
+            },
+        ],
+    }
+    return render(request, "szef/financial_ledger.html", dummy_context)
+
+
+@login_required
+def report_brigade_summary_view(request):
+    """Placeholder view for brigade summary report."""
+    return render(request, "szef/report_brigade_summary.html")
+
+
+@login_required
+def report_worker_payroll_view(request):
+    """Placeholder view for individual worker payroll report."""
+    return render(request, "szef/report_worker_payroll.html")

@@ -2,17 +2,19 @@
 {% load dict_filters %}
 
 {% block content %}
-<h1>Panel Główny</h1>
-
 {% if user.role == 'BRYGADZISTA' and user.brigade %}
-<p>Zarządzasz brygadą: <strong>{{ user.brigade.name }}</strong></p>
+  <h1>Panel Zarządzania Brygadzisty</h1>
+  <p>Zarządzasz brygadą: <strong>{{ user.brigade.name }}</strong></p>
 
-<div id="timesheet-wrapper" class="mt-4">
-  {% include "partials/timesheet_wrapper.html" %}
-</div>
-
+  <div id="timesheet-wrapper" class="mt-4">
+    {% include "partials/timesheet_wrapper.html" %}
+  </div>
+  <hr class="my-5">
+  {% include "partials/foreman_finance_panel.html" %}
+{% elif user.role == 'SZEF'%}
+  {% include 'szef/szef_dashboard.html' %}
 {% else %}
-<p>Witaj w systemie, {{ user.username }}!</p>
+  <p>Witaj w systemie, {{ user.username }}!</p>
 {% endif %}
 
 {% endblock content %}

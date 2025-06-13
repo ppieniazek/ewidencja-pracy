@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Zarządzaj Składem: {{ brigade_name }}</h2>
+<p>Przenoś pracowników pomiędzy listami, aby przypisać ich do brygady.</p>
+<div class="row">
+  <div class="col-md-6">
+    <h4>Pracownicy w Brygadzie</h4>
+    <ul class="list-group">
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        Jan Kowalski
+        <button class="btn btn-sm btn-danger">&laquo; Usuń</button>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        Adam Nowak
+        <button class="btn btn-sm btn-danger">&laquo; Usuń</button>
+      </li>
+    </ul>
+  </div>
+  <div class="col-md-6">
+    <h4>Dostępni Pracownicy</h4>
+    <ul class="list-group">
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        Piotr Zając (Test)
+        <button class="btn btn-sm btn-success">Dodaj &raquo;</button>
+      </li>
+    </ul>
+  </div>
+</div>
+{% endblock %}

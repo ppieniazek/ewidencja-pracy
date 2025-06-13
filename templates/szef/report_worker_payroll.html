@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Raport: Wypłata Pracownika</h2>
+<p>Wybierz pracownika i miesiąc, aby wygenerować raport.</p>
+<form class="row g-3">
+  <div class="col-md-4"><label class="form-label">Pracownik</label><select class="form-select">
+      <option>Jan Kowalski</option>
+    </select></div>
+  <div class="col-md-3"><label class="form-label">Miesiąc</label><select class="form-select">
+      <option>Czerwiec</option>
+    </select></div>
+  <div class="col-md-3"><label class="form-label">Rok</label><input type="number" class="form-control" value="2025">
+  </div>
+  <div class="col-md-2 align-self-end"><button class="btn btn-primary w-100">Generuj</button></div>
+</form>
+<div class="mt-4 p-3 border rounded">
+  <h4>Raport Wypłaty dla: Jan Kowalski (Czerwiec 2025)</h4>
+  <p>Stawka godzinowa: 25.00 zł</p>
+  <p>Suma godzin: 160h</p>
+  <p>Wynagrodzenie brutto: 4000.00 zł</p>
+  <p>Suma zaliczek: -200.00 zł</p>
+  <hr>
+  <p><strong>Do wypłaty: 3800.00 zł</strong></p>
+</div>
+{% endblock %}

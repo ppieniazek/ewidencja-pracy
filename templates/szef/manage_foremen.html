@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Zarządzaj Brygadzistami</h2>
+<p>Twórz konta dla nowych brygadzistów i zarządzaj ich przypisaniem do brygad.</p>
+<button class="btn btn-success mb-3">Dodaj Nowego Brygadzistę</button>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nazwa Użytkownika</th>
+      <th>Zarządza Brygadą</th>
+      <th>Akcje</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for foreman in foremen %}
+    <tr>
+      <td>{{ foreman.id }}</td>
+      <td>{{ foreman.name }}</td>
+      <td>{{ foreman.brigade }}</td>
+      <td><button class="btn btn-sm btn-warning">Edytuj</button></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

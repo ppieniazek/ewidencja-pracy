@@ -25,4 +25,24 @@ urlpatterns = [
         views.get_bulk_edit_form,
         name="get_bulk_edit_form",
     ),
+    # TODO dummy data
+    path("szef-dashboard/", views.szef_dashboard_view, name="szef_dashboard"),
+    path("manage/workers/", views.manage_workers_view, name="manage_workers"),
+    path("manage/foremen/", views.manage_foremen_view, name="manage_foremen"),
+    path(
+        "manage/assign-workers/<int:brigade_id>/",
+        views.assign_workers_view,
+        name="assign_workers",
+    ),
+    path("finance/ledger/", views.financial_ledger_view, name="financial_ledger"),
+    path(
+        "reports/brigade-summary/",
+        views.report_brigade_summary_view,
+        name="report_brigade_summary",
+    ),
+    path(
+        "reports/worker-payroll/",
+        views.report_worker_payroll_view,
+        name="report_worker_payroll",
+    ),
 ]
