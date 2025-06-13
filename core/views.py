@@ -84,13 +84,16 @@ def dashboard(request, year=None, month=None):
     user = request.user
 
     if user.role == "BRYGADZISTA" and user.brigade:
+        target_date = None
         if year and month:
             target_date = date(year, month, 1)
-        elif request.GET.get("year").isdigit() and request.GET.get("month").isdigit():
-            target_date = date(
-                int(request.GET.get("year")), int(request.GET.get("month")), 1
-            )
-        else:
+        elif request.GET.get("year") and request.GET.get("month"):
+            q_year = request.GET.get("year")
+            q_month = request.GET.get("month")
+            if q_year.isdigit() and q_month.isdigit():
+                target_date = date(int(q_year), int(q_month), 1)
+
+        if target_date is None:
             target_date = date.today()
 
         context.update(_get_timesheet_context(user, target_date))

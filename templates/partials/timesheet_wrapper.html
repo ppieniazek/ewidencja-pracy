@@ -23,15 +23,15 @@
 
 {# The timesheet table itself #}
 <div class="table-responsive">
-  <table class="table table-bordered table-hover">
-    <thead class="table-dark">
+  <table class="table table-bordered table-hover table-light">
+    <thead class="table-secondary">
       <tr>
         <th style="min-width: 150px;">Pracownik</th>
         {% for day in days %}
         <th class="text-center">{{ day }}</th>
         {% endfor %}
       </tr>
-      <tr>
+      <tr class="table-light">
         <td><strong>Dla wszystkich</strong></td>
         {% for day in days %}
         {% include "partials/bulk_timesheet_cell.html" %}
