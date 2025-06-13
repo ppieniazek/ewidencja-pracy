@@ -7,31 +7,10 @@
 {% if user.role == 'BRYGADZISTA' and user.brigade %}
 <p>Zarządzasz brygadą: <strong>{{ user.brigade.name }}</strong></p>
 
-<h3 class="mt-4">Ewidencja godzin - {{ current_month_name }} {{ current_year }}</h3>
-
-<div class="table-responsive">
-  <table class="table table-bordered table-hover">
-    <thead class="table-dark">
-      <tr>
-        <th style="min-width: 150px;">Pracownik</th>
-        {% for day in days %}
-          <th class="text-center">{{ day }}</th>
-        {% endfor %}
-      </tr>
-      {# --- NEW BULK INPUT ROW --- #}
-      <tr>
-        <td><strong>Dla wszystkich</strong></td>
-        {% for day in days %}
-          {% include 'partials/bulk_timesheet_cell.html' %}
-        {% endfor %}
-      </tr>
-    </thead>
-    <tbody id="timesheet-body">
-      {# Use the new partial to render the rows #}
-      {% include "partials/table_body.html" %}
-    </tbody>
-  </table>
+<div id="timesheet-wrapper" class="mt-4">
+  {% include "partials/timesheet_wrapper.html" %}
 </div>
+
 {% else %}
 <p>Witaj w systemie, {{ user.username }}!</p>
 {% endif %}

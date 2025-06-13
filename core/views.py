@@ -1,5 +1,5 @@
 import calendar
-from datetime import date
+from datetime import date, timedelta
 
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
@@ -25,27 +25,26 @@ def custom_logout_view(request):
     return response
 
 
-def _get_timesheet_context(user):
+def _get_timesheet_context(user, target_date: date):
     context = {}
-    today = date.today()
-    month_translation = {
-        "January": "Styczeń",
-        "February": "Luty",
-        "March": "Marzec",
-        "April": "Kwiecień",
-        "May": "Maj",
-        "June": "Czerwiec",
-        "July": "Lipiec",
-        "August": "Sierpień",
-        "September": "Wrzesień",
-        "October": "Październik",
-        "November": "Listopad",
-        "December": "Grudzień",
-    }
+    polish_months = [
+        (1, "Styczeń"),
+        (2, "Luty"),
+        (3, "Marzec"),
+        (4, "Kwiecień"),
+        (5, "Maj"),
+        (6, "Czerwiec"),
+        (7, "Lipiec"),
+        (8, "Sierpień"),
+        (9, "Wrzesień"),
+        (10, "Październik"),
+        (11, "Listopad"),
+        (12, "Grudzień"),
+    ]
 
     workers = user.brigade.workers.all().order_by("last_name", "first_name")
     timesheet_entries = TimeSheet.objects.filter(
-        worker__in=workers, date__year=today.year, date__month=today.month
+        worker__in=workers, date__year=target_date.year, date__month=target_date.month
     )
 
     hours_map = {}
@@ -54,30 +53,52 @@ def _get_timesheet_context(user):
             hours_map[entry.worker.id] = {}
         hours_map[entry.worker.id][entry.date.day] = entry.hours_worked
 
-    num_days = calendar.monthrange(today.year, today.month)[1]
+    num_days = calendar.monthrange(target_date.year, target_date.month)[1]
+
+    # Prev and next months
+    first_day_of_month = target_date.replace(day=1)
+    prev_month_date = first_day_of_month - timedelta(days=1)
+    next_month_date = first_day_of_month + timedelta(days=num_days)
 
     context.update(
         {
             "workers": workers,
             "days": list(range(1, num_days + 1)),
             "hours_map": hours_map,
-            "current_month": today.month,
-            "current_year": today.year,
-            "current_month_name": month_translation.get(today.strftime("%B")),
+            "current_month": target_date.month,
+            "current_month_name": polish_months[target_date.month - 1][1],
+            "current_year": target_date.year,
+            "prev_month": prev_month_date.month,
+            "prev_year": prev_month_date.year,
+            "next_month": next_month_date.month,
+            "next_year": next_month_date.year,
+            "months_list": polish_months,
         }
     )
     return context
 
 
 @login_required
-def dashboard(request):
+def dashboard(request, year=None, month=None):
     context = {}
     user = request.user
 
     if user.role == "BRYGADZISTA" and user.brigade:
-        context.update(_get_timesheet_context(user))
+        if year and month:
+            target_date = date(year, month, 1)
+        elif request.GET.get("year").isdigit() and request.GET.get("month").isdigit():
+            target_date = date(
+                int(request.GET.get("year")), int(request.GET.get("month")), 1
+            )
+        else:
+            target_date = date.today()
 
-    return render(request, "core/dashboard.html", context)
+        context.update(_get_timesheet_context(user, target_date))
+
+    if request.htmx:
+        return render(request, "partials/timesheet_wrapper.html", context)
+    else:
+        return render(request, "core/dashboard.html", context)
 
 
 @login_required
@@ -127,13 +148,13 @@ def save_hours(request, worker_id):
 
 
 @login_required
-def get_bulk_edit_form(request, day):
-    context = {"day": day}
+def get_bulk_edit_form(request, day, year, month):
+    context = {"day": day, "year": year, "month": month}
     return render(request, "partials/bulk_edit_form.html", context)
 
 
 @login_required
-def bulk_save_hours(request):
+def bulk_save_hours(request, year, month):
     if not (request.method == "POST" and request.htmx):
         return HttpResponse(status=400)
 
@@ -144,8 +165,7 @@ def bulk_save_hours(request):
     day = int(request.POST.get("day"))
     hours_str = request.POST.get(f"hours_{day}")
 
-    today = date.today()
-    entry_date = date(today.year, today.month, day)
+    entry_date = date(year, month, day)
 
     if hours_str and hours_str.strip():
         try:
@@ -170,7 +190,8 @@ def bulk_save_hours(request):
         except (ValueError, TypeError):
             pass
 
-    context = _get_timesheet_context(user)
+    target_date = date(year, month, 1)
+    context = _get_timesheet_context(user, target_date)
     context["day"] = day
 
     return render(request, "partials/bulk_update_response.html", context)

@@ -1,7 +1,7 @@
 <td id="bulk-cell-{{ day }}"
     class="text-center"
     style="cursor: pointer;"
-    hx-get="{% url 'get_bulk_edit_form' day=day %}"
+    hx-get="{% url 'get_bulk_edit_form' year=current_year month=current_month day=day %}"
     hx-target="this"
     hx-swap="outerHTML">
     -

@@ -1,5 +1,5 @@
 <td id="bulk-cell-{{ day }}" class="p-1">
-    <form hx-post="{% url 'bulk_save_hours' %}"
+    <form hx-post="{% url 'bulk_save_hours' year=year month=month %}"
           hx-target="#timesheet-body"
           hx-swap="innerHTML"
           hx-trigger="input changed delay:2s, blur"
