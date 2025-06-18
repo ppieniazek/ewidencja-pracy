@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if user.is_superuser %}
+<h3>Panel Szefa</h3>
+
+{% else %}
+<h3>Panel Brygadzisty</h3>
+
+{% endif %}
+{% endblock %}
